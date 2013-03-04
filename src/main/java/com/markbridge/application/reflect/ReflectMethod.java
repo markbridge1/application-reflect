@@ -40,10 +40,6 @@ public class ReflectMethod {
     private static int CLIENT_CODE_STACK_INDEX;
     
     public ReflectMethod() {
-        
-    }
-    
-    public static void init() {
         if(INITIALIZE) {
             // Finds out the index of "this code" in the returned stack trace - funny but it differs in JDK 1.5 and 1.6
             
@@ -59,37 +55,35 @@ public class ReflectMethod {
             } catch(Exception ex) {
                 
             }
-            
             INITIALIZE = Boolean.FALSE;
         }
     }
 
-    public static String methodName() {
+    public String methodName() {
         return Thread.currentThread().getStackTrace()[CLIENT_CODE_STACK_INDEX].getMethodName();
     }
 
-    public static String callingMethodName() {
+    public String callingMethodName() {
         return Thread.currentThread().getStackTrace()[CLIENT_CODE_STACK_INDEX + 1].getMethodName();
     }
 
     public static void main(String[] args) {
         
-        init();
+        ReflectMethod rm = new ReflectMethod();
         
-        System.out.println("methodName() = " + ReflectMethod.methodName());
+        System.out.println("methodName() = " + rm.methodName());
         System.out.println("CLIENT_CODE_STACK_INDEX = " + CLIENT_CODE_STACK_INDEX);
         
-        ReflectMethod test = new ReflectMethod();
-        test.test();
+        rm.callingMethod();
     }
     
-    public void test() {
+    public void callingMethod() {
         calledMethod();
     }
     
     public void calledMethod() {
-        System.out.println("this method is: " + ReflectMethod.methodName());
+        System.out.println("this method is: " + methodName());
         System.out.println("the method that called this method is: " 
-                + ReflectMethod.callingMethodName());
+                + callingMethodName());
     }
 }
