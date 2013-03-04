@@ -25,15 +25,6 @@
  */
 package com.markbridge.application.reflect;
 
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Scanner;
-import java.util.Set;
-
 /**
  * @author mbridge
  */
@@ -73,26 +64,32 @@ public class ReflectMethod {
         }
     }
 
+    public static String methodName() {
+        return Thread.currentThread().getStackTrace()[CLIENT_CODE_STACK_INDEX].getMethodName();
+    }
+
+    public static String callingMethodName() {
+        return Thread.currentThread().getStackTrace()[CLIENT_CODE_STACK_INDEX + 1].getMethodName();
+    }
+
     public static void main(String[] args) {
         
         init();
         
-        System.out.println("methodName() = " + methodName());
+        System.out.println("methodName() = " + ReflectMethod.methodName());
         System.out.println("CLIENT_CODE_STACK_INDEX = " + CLIENT_CODE_STACK_INDEX);
         
         ReflectMethod test = new ReflectMethod();
         test.test();
     }
-
-    public static String methodName() {
-        return Thread.currentThread().getStackTrace()[CLIENT_CODE_STACK_INDEX].getMethodName();
-    }
     
     public void test() {
-        nowThis();
+        calledMethod();
     }
     
-    public void nowThis() {
-        System.out.println(methodName());
+    public void calledMethod() {
+        System.out.println("this method is: " + ReflectMethod.methodName());
+        System.out.println("the method that called this method is: " 
+                + ReflectMethod.callingMethodName());
     }
 }
